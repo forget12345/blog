@@ -79,7 +79,8 @@ class Manage
 
     }
 
-    public function addArticle(){
+    public function addArticle()
+    {
 
     }
 }
