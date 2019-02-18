@@ -13,8 +13,7 @@ import Vueaxios from 'vue-axios'
 
 Vue.use(Vueaxios, axios)
 Vue.use(ElementUI);
-
-axios.defaults.baseURL = '/api/api/public/index.php/index/'
+axios.defaults.baseURL = '/api/api/public/index.php/'
 //设置默认请求头
 axios.defaults.headers = {
   'X-Requested-With': 'XMLHttpRequest'
@@ -43,10 +42,12 @@ axios.interceptors.request.use(function (config) {
 //响应拦截器即异常处理
 axios.interceptors.response.use(response => {
   console.log(response.data)
-  if(response.data.code!=0){
+  if (response.data.code != 0) {
     Vue.prototype.$message.error(response.data.message);
-    if(response.data.code){
-
+    switch (response.data.code) {
+      case 10003:
+      //想办法跳转到login页面
+        break
     }
     return false
   }
