@@ -5,12 +5,12 @@
       class="el-menu-demo"
       mode="horizontal"
       @select="handleSelect"
+      :router="router"
     >
-        <el-menu-item index="1">博客管理</el-menu-item>
-        <el-menu-item index="2">写博客</el-menu-item>
-        <el-menu-item index="3">个人信息设置</el-menu-item>
+      <el-menu-item index="index">博客管理</el-menu-item>
+      <el-menu-item index="new">写博客</el-menu-item>
+      <el-menu-item index="PersonalInfoSet">个人信息设置</el-menu-item>
     </el-menu>
-    {{id}}
   </div>
 </template>
 <script>
@@ -19,12 +19,24 @@ export default {
   data() {
     return {
       activeIndex: "1",
-      activeIndex2: "2"
+      activeIndex2: this.id,
+      router: true
     };
+  },
+  mounted: function() {
+    this.getCookie("auth_name") == null
+      ? function() {
+          this.$router.push({ path: "login" });
+          this.$message({
+            message: "请先进行登录，再进行操作",
+            type: "warning"
+          });
+        }
+      : "";
   },
   methods: {
     handleSelect(key, keyPath) {
-      console.log(key, keyPath);
+      // console.log(key, keyPath);
     }
   }
 };

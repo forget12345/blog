@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <Nav id=2></Nav>
+    <Nav id='new'></Nav>
     <div id="editor"
       ref="editor"
       style="text-align:left"

@@ -38,24 +38,43 @@ export default {
       password: ""
     };
   },
+  mounted: function() {
+    console.log(this.getCookie("ss"));
+    this.getCookie("auth_name") != null
+      ? this.$router.push({ path: "index" })
+      : "";
+  },
   methods: {
     login: function() {
       var _this = this;
-      this.axios
-        .post("/manage/login", {
+      this.axios.post('/manage/login', {
           username: this.username,
           password: this.password
-        })
-        .then(function(response) {
-          _this.$message({
-            message: "登录成功",
-            type: "success"
-          });
-          _this.$router.push({ path: "index" });
-        })
-        .catch(function(error) {
-          console.log(error);
+        }).then(function(response) {
+          console.log(response);
+          if (response != false) {
+            _this.$message({
+              message: "登录成功",
+              type: "success"
+            });
+            _this.$router.push({ path: "index" });
+          }
         });
+      // this.axios
+      //   .post("/manage/login", {
+      //     username: this.username,
+      //     password: this.password
+      //   })
+      //   .then(function(response) {
+      //     console.log(response);
+      //     if (response != false) {
+      //       _this.$message({
+      //         message: "登录成功",
+      //         type: "success"
+      //       });
+      //       _this.$router.push({ path: "index" });
+      //     }
+      //   });
     }
   }
 };

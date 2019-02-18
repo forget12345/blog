@@ -14,7 +14,7 @@ import Vueaxios from 'vue-axios'
 Vue.use(Vueaxios, axios)
 Vue.use(ElementUI);
 
-axios.defaults.baseURL = '/api/public/index.php/index/'
+axios.defaults.baseURL = '/api/api/public/index.php/index/'
 //设置默认请求头
 axios.defaults.headers = {
   'X-Requested-With': 'XMLHttpRequest'
@@ -43,6 +43,13 @@ axios.interceptors.request.use(function (config) {
 //响应拦截器即异常处理
 axios.interceptors.response.use(response => {
   console.log(response.data)
+  if(response.data.code!=0){
+    Vue.prototype.$message.error(response.data.message);
+    if(response.data.code){
+
+    }
+    return false
+  }
   return response
 }, err => {
   if (err && err.response) {
@@ -94,6 +101,20 @@ axios.interceptors.response.use(response => {
   message.err(err.message)
   return Promise.resolve(err.response)
 })
+
+
+Vue.prototype.getCookie = function (name) {
+  var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+  if (arr != null) return (arr[2]); return null;
+}
+
+
+Vue.prototype.delCookie = function (name) {
+  var exp = new Date();
+  exp.setTime(exp.getTime() - 1);
+  var cval = getCookie(name);
+  if (cval != null) document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
+}
 
 
 /* eslint-disable no-new */

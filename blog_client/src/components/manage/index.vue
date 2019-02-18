@@ -1,12 +1,11 @@
 <template>
   <div class="hello">
-    <Nav id=1></Nav>
+    <Nav id='index'></Nav>
     <div
       id="editor"
       ref="editor"
       style="text-align:left"
     ></div>
-    <button v-on:click="getContent">保存文件</button>
   </div>
 </template>
 
