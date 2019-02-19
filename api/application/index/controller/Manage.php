@@ -6,7 +6,7 @@ use app\index\model\ManageUser;
 use app\index\model\Category;
 use think\facade\Request;
 use think\facade\Cookie;
-
+use think\File;
 class Manage
 {
     public function __construct()
@@ -50,6 +50,7 @@ class Manage
     public function GetCategory()
     {
         $Category = Category::all();
+
         return packJsonData($Category, 'success', 0);
     }
 
@@ -82,5 +83,20 @@ class Manage
     public function addArticle()
     {
 
+    }
+
+    public function uploadImg(){
+        $file = request()->file('images');
+        // 移动到框架应用根目录/uploads/ 目录下
+        $info = $file->move( '../uploads');
+        if($info){
+            //由于开发代理端口为8080，目前先改成这样
+            $result = ['errno'=>0,'data'=>array( 'http:/\/\127.0.0.1/api/uploads/'.$info->getSaveName())];
+//            $result = ['errno'=>0,'data'=>array( '/api/uploads/'.$info->getSaveName())];
+        }else{
+            // 上传失败获取错误信息
+            echo $file->getError();
+        }
+        return $result;
     }
 }

@@ -13,6 +13,27 @@ import Vueaxios from 'vue-axios'
 
 Vue.use(Vueaxios, axios)
 Vue.use(ElementUI);
+
+Vue.prototype.getCookie = function (name) {
+  var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+  if (arr != null) return (arr[2]); return null;
+}
+
+Vue.prototype.setCookie = function(key,val,time=1){//设置cookie方法
+  var date=new Date(); //获取当前时间
+  var expiresDays=time;  //将date设置为n天以后的时间
+  date.setTime(date.getTime()+expiresDays*24*3600*1000); //格式化为cookie识别的时间
+  document.cookie=key + "=" + val +";expires="+date.toGMTString();  //设置cookie
+},
+
+Vue.prototype.delCookie = function (name) {
+  var exp = new Date();
+  exp.setTime(exp.getTime() - 1);
+  var cval = getCookie(name);
+  if (cval != null) document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
+}
+
+
 axios.defaults.baseURL = '/api/api/public/index.php/'
 //设置默认请求头
 axios.defaults.headers = {
@@ -34,19 +55,20 @@ axios.interceptors.request.use(function (config) {
   return config;
 }, function (error) {
   //当出现请求错误是做一些事
-  console.log(error);
+  // console.log(error);
   return Promise.reject(error);
 });
 
 
 //响应拦截器即异常处理
 axios.interceptors.response.use(response => {
-  console.log(response.data)
+  // console.log(response.data)
   if (response.data.code != 0) {
     Vue.prototype.$message.error(response.data.message);
     switch (response.data.code) {
       case 10003:
       //想办法跳转到login页面
+      Vue.prototype.setCookie('check_login_fail',true)
         break
     }
     return false
@@ -97,25 +119,14 @@ axios.interceptors.response.use(response => {
   } else {
     err.message = "连接到服务器失败"
   }
-  console.log(err.message)
+  // console.log(err.message)
   Vue.prototype.$message.error(err.message);
   message.err(err.message)
   return Promise.resolve(err.response)
 })
 
 
-Vue.prototype.getCookie = function (name) {
-  var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
-  if (arr != null) return (arr[2]); return null;
-}
 
-
-Vue.prototype.delCookie = function (name) {
-  var exp = new Date();
-  exp.setTime(exp.getTime() - 1);
-  var cval = getCookie(name);
-  if (cval != null) document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
-}
 
 
 /* eslint-disable no-new */

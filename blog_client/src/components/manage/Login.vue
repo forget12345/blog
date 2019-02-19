@@ -39,7 +39,6 @@ export default {
     };
   },
   mounted: function() {
-    console.log(this.getCookie("ss"));
     this.getCookie("auth_name") != null
       ? this.$router.push({ path: "index" })
       : "";
@@ -47,10 +46,12 @@ export default {
   methods: {
     login: function() {
       var _this = this;
-      this.axios.post('/manage/login', {
+      this.axios
+        .post("/manage/login", {
           username: this.username,
           password: this.password
-        }).then(function(response) {
+        })
+        .then(function(response) {
           console.log(response);
           if (response != false) {
             _this.$message({

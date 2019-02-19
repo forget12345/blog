@@ -12,12 +12,13 @@
 Route::get('think', function () {
     return 'hello,ThinkPHP5!';
 });
-Route::get('/', 'index');
-Route::get('hello/:name', 'index/hello');
+//Route::get('/', 'index');
+//Route::get('hello/:name', 'index/hello');
 
 Route::post('manage/login', 'manage/login'); //login
 Route::get('manage/category', 'manage/GetCategory'); //get blog category
 Route::post('manage/category', 'manage/ADDCategory'); //write blog category
+Route::post('manage/upload', 'manage/uploadImg'); //write blog category
 
 
 
