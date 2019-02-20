@@ -19,7 +19,8 @@ Route::post('manage/login', 'manage/login'); //login
 Route::get('manage/category', 'manage/GetCategory'); //get blog category
 Route::post('manage/category', 'manage/ADDCategory'); //write blog category
 Route::post('manage/upload', 'manage/uploadImg'); //write blog category
-
+Route::post('manage/article', 'manage/addArticle'); //write blog category
+Route::get('manage/article', 'manage/getArticle'); //get blog category
 
 
 return [

@@ -29,7 +29,7 @@ Vue.prototype.setCookie = function(key,val,time=1){//设置cookie方法
 Vue.prototype.delCookie = function (name) {
   var exp = new Date();
   exp.setTime(exp.getTime() - 1);
-  var cval = getCookie(name);
+  var cval = Vue.prototype.getCookie(name);
   if (cval != null) document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
 }
 
@@ -68,6 +68,7 @@ axios.interceptors.response.use(response => {
     switch (response.data.code) {
       case 10003:
       //想办法跳转到login页面
+      // window.location.href="/manage/login";
       Vue.prototype.setCookie('check_login_fail',true)
         break
     }

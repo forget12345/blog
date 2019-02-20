@@ -4,9 +4,11 @@ namespace app\index\controller;
 
 use app\index\model\ManageUser;
 use app\index\model\Category;
+use app\index\model\Content;
 use think\facade\Request;
 use think\facade\Cookie;
 use think\File;
+use think\db;
 class Manage
 {
     public function __construct()
@@ -80,20 +82,49 @@ class Manage
 
     }
 
+    //增加文章
     public function addArticle()
     {
 
+        $id = Request::post('id', '', 'strip_tags,strtolower');
+        $title = Request::post('title', '', 'strip_tags,strtolower');
+        $introduction = Request::post('introduction', '', 'strip_tags,strtolower');
+        $text = Request::post('text', '', null);
+        if ($text == null || $title == null || $id == null) {
+            return packJsonData('', '新文章提交失败，标题、类别、内容不能为空', 10007);
+        }
+        $introduction = $introduction == null ? substr(Request::post('text', '', 'strip_tags,strtolower'), 0, 150) : $introduction;
+        $Content = new Content;
+        $Content->categoryId = $id;
+        $Content->title = $title;
+        $Content->introduction = $introduction;
+        $Content->text = $text;
+        if ($Content->save()) {
+            $result = packJsonData('', 'success', 0);
+        } else {
+            $result = packJsonData('', '新文章提交失败，数据库错误', 10008);
+        }
+        return $result;
     }
 
-    public function uploadImg(){
+    //获取文章
+    public function getArticle()
+    {
+//        $Category = Content::all();
+        $Category = Db::table('blog_content')->page(1, 10)->select();
+        return packJsonData($Category, 'success', 0);
+    }
+
+    public function uploadImg()
+    {
         $file = request()->file('images');
         // 移动到框架应用根目录/uploads/ 目录下
-        $info = $file->move( '../uploads');
-        if($info){
+        $info = $file->move('../uploads');
+        if ($info) {
             //由于开发代理端口为8080，目前先改成这样
-            $result = ['errno'=>0,'data'=>array( 'http:/\/\127.0.0.1/api/uploads/'.$info->getSaveName())];
+            $result = ['errno' => 0, 'data' => array('http:/\/\127.0.0.1/api/uploads/' . $info->getSaveName())];
 //            $result = ['errno'=>0,'data'=>array( '/api/uploads/'.$info->getSaveName())];
-        }else{
+        } else {
             // 上传失败获取错误信息
             echo $file->getError();
         }

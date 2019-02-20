@@ -26,9 +26,11 @@ export default {
     };
   },
   mounted: function() {
-    // if (this.getCookie("check_login_fail") == "true") {
-    //   this.$router.push({ path: "login" });
-    // }
+    if (this.getCookie("check_login_fail") == "true") {
+       this.delCookie("check_login_fail")
+       this.delCookie("auth_name")
+      this.$router.push({ path: "login" });
+    }
     this.getCookie("auth_name") == null
       ? function() {
           this.$router.push({ path: "login" });
@@ -42,6 +44,7 @@ export default {
   methods: {
     handleSelect(key, keyPath) {
       // console.log(key, keyPath);
+      
     }
   },
   watch: {

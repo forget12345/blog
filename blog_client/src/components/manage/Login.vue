@@ -39,7 +39,8 @@ export default {
     };
   },
   mounted: function() {
-    this.getCookie("auth_name") != null
+      (this.getCookie('auth_name') != null &&
+    this.getCookie("check_login_fail") != 'true' )
       ? this.$router.push({ path: "index" })
       : "";
   },
@@ -58,6 +59,7 @@ export default {
               message: "登录成功",
               type: "success"
             });
+            _this.delCookie("check_login_fail")
             _this.$router.push({ path: "index" });
           }
         });

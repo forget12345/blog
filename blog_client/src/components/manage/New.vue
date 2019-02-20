@@ -6,7 +6,7 @@
 
         <el-input
           style="width:70%;margin:30px 2.5%;float:left"
-          v-model="input"
+          v-model="title"
           placeholder="请输入标题"
           minlength=1
           maxlength=50
@@ -19,14 +19,15 @@
         <el-select
           style="width:calc( 20% - 2% );margin:30px 2.5% 30px 0;float:left"
           v-model="value"
+          :id="test"
           clearable
           placeholder="请选择"
         >
           <el-option
             v-for="item in options"
-            :key="item.id"
+            :key="item.Id"
             :label="item.name"
-            :value="item.id"
+            :value="item.Id"
           >
           </el-option>
         </el-select>
@@ -38,6 +39,7 @@
           minlength=1
           maxlength=150
           placeholder="请输入简要介绍，否则默认抓取前50位置，最多150个字符"
+          v-model="introduction"
         ></el-input>
       </div>
       <div
@@ -45,7 +47,7 @@
         ref="editor"
         style="text-align:left;min-height:500px;"
       ></div>
-      <button v-on:click="getContent">保存文件</button>
+      <button v-on:click="add">保存文件</button>
     </div>
   </div>
 </template>
@@ -60,14 +62,17 @@ export default {
   data() {
     return {
       editorContent: "",
-      options: [],
+      options: "",
       value: "",
-      input: ""
+      input: "",
+      title: window.localStorage["title"],
+      introduction: window.localStorage["introduction"],
+      test: ""
     };
   },
   methods: {
     getContent: function() {
-      alert(this.editorContent);
+      alert();
     },
     getCategory: function() {
       var _this = this;
@@ -85,12 +90,37 @@ export default {
         }
       });
     },
+    add() {
+      var _this = this;
+      this.axios
+        .post("/manage/article", {
+          title: this.title,
+          introduction: this.introduction,
+          id: this.value,
+          text: this.editorContent
+        })
+        .then(function(response) {
+          console.log(response);
+          if (response != false) {
+            _this.$message({
+              message: "发布成功",
+              type: "success"
+            });
+            _this.title = "";
+            _this.introduction = "";
+            _this.value = "";
+            _this.editorContent = "";
+            window.localStorage.clear();
+        
+          }
+        });
+    },
     addNewcCategory() {
-      this.$prompt("请输入邮箱", "提示", {
+      this.$prompt("请输入类别名称", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         inputPattern: /[a-zA-Z0-9]{1,15}?/,
-        inputErrorMessage: "邮箱格式不正确"
+        inputErrorMessage: "格式不正确"
       })
         .then(({ value }) => {
           var _this = this;
@@ -125,8 +155,28 @@ export default {
       this.editorContent = html;
     };
     editor.create();
-    console.log(window.innerHeight);
+    editor.txt.html(window.localStorage["blog"]);
     this.getCategory();
+  },
+  watch: {
+    editorContent(val, oldVal) {
+      console.log(val);
+      if (val != "") {
+        window.localStorage["blog"] = val;
+      }
+    },
+    title(val, oldVal) {
+      console.log(val);
+      if (val != "") {
+        window.localStorage["title"] = val;
+      }
+    },
+    introduction(val, oldVal) {
+      console.log(val);
+      if (val != "") {
+        window.localStorage["introduction"] = val;
+      }
+    }
   }
 };
 </script>
