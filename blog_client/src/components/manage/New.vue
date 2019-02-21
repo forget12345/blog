@@ -47,7 +47,18 @@
         ref="editor"
         style="text-align:left;min-height:500px;"
       ></div>
-      <button v-on:click="add">保存文件</button>
+      <el-button
+        class="btn"
+        type="primary"
+        v-if="lSflag"
+        v-on:click="updated"
+      >修改博客</el-button>
+      <el-button
+        class="btn"
+        type="primary"
+        v-else
+        v-on:click="add"
+      >保存博客</el-button>
     </div>
   </div>
 </template>
@@ -65,9 +76,11 @@ export default {
       options: "",
       value: "",
       input: "",
-      title: window.localStorage["title"],
-      introduction: window.localStorage["introduction"],
-      test: ""
+      title: "",
+      introduction: "",
+      test: "",
+      lSflag: false,
+      wangedit:""
     };
   },
   methods: {
@@ -110,8 +123,54 @@ export default {
             _this.introduction = "";
             _this.value = "";
             _this.editorContent = "";
+            _this.wangedit.txt.html("");
             window.localStorage.clear();
-        
+          }
+        });
+    },
+    getOneArticle: function(edit) {
+      var _this = this;
+      this.axios
+        .get("/manage/onearticle", {
+          params: {
+            bid: this.$route.query.id
+          }
+        })
+        .then(function(response) {
+          if (response != false) {
+            // return response.data.data;
+            edit.txt.html(response.data.data.text);
+            _this.title = response.data.data.title;
+            _this.introduction = response.data.data.introduction;
+            _this.value = response.data.data.categoryId;
+            
+            // _this.editorContent = response.data.data.;
+          }
+        });
+    },
+    updated() {
+      var _this = this;
+      this.axios
+        .put("/manage/article", {
+          title: this.title,
+          introduction: this.introduction,
+          id: this.value,
+          text: this.editorContent,
+          bid: this.$route.query.id
+        })
+        .then(function(response) {
+          console.log(response);
+          if (response != false) {
+            _this.$message({
+              message: "修改成功",
+              type: "success"
+            });
+            _this.title = "";
+            _this.introduction = "";
+            _this.value = "";
+            _this.editorContent = "";
+            _this.wangedit.txt.html("");
+            // console.log(_this.wangedit)
           }
         });
     },
@@ -155,25 +214,35 @@ export default {
       this.editorContent = html;
     };
     editor.create();
-    editor.txt.html(window.localStorage["blog"]);
+    this.wangedit = editor;
+    if (this.$route.query.id == null) {
+      editor.txt.html(window.localStorage["blog"]);
+      this.title = window.localStorage["title"];
+      this.introduction = window.localStorage["introduction"];
+    } else {
+      this.lSflag = true;
+      this.getOneArticle(editor);
+      editor.txt.html("加载中");
+    }
+    this.wangedit=editor
     this.getCategory();
   },
   watch: {
     editorContent(val, oldVal) {
       console.log(val);
-      if (val != "") {
+      if (val != "" && this.lSflag != true) {
         window.localStorage["blog"] = val;
       }
     },
     title(val, oldVal) {
       console.log(val);
-      if (val != "") {
+      if (val != "" && this.lSflag != true) {
         window.localStorage["title"] = val;
       }
     },
     introduction(val, oldVal) {
       console.log(val);
-      if (val != "") {
+      if (val != "" && this.lSflag != true) {
         window.localStorage["introduction"] = val;
       }
     }
@@ -187,6 +256,8 @@ export default {
   height: none !important;
   min-height: 520px !important;
 }
+</style>
+<style scoped>
 .main {
   width: 1100px;
   margin: auto;
@@ -198,5 +269,8 @@ export default {
   border-top-right-radius: 10px;
   margin-top: 3px;
   border-bottom: none;
+}
+.btn {
+  margin: 10px;
 }
 </style>

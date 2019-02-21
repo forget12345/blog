@@ -13,7 +13,6 @@ import Vueaxios from 'vue-axios'
 
 Vue.use(Vueaxios, axios)
 Vue.use(ElementUI);
-
 Vue.prototype.getCookie = function (name) {
   var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
   if (arr != null) return (arr[2]); return null;

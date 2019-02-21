@@ -21,6 +21,9 @@ Route::post('manage/category', 'manage/ADDCategory'); //write blog category
 Route::post('manage/upload', 'manage/uploadImg'); //write blog category
 Route::post('manage/article', 'manage/addArticle'); //write blog category
 Route::get('manage/article', 'manage/getArticle'); //get blog category
+Route::put('manage/article', 'manage/updateArticle'); //get blog category
+Route::delete('manage/article', 'manage/deleteArticle'); //get blog category
+Route::get('manage/onearticle', 'manage/getOneArticle'); //get blog category
 
 
 return [

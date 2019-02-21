@@ -9,6 +9,7 @@ use think\facade\Request;
 use think\facade\Cookie;
 use think\File;
 use think\db;
+
 class Manage
 {
     public function __construct()
@@ -49,10 +50,9 @@ class Manage
     }
 
     //获取所有类别
-    public function GetCategory()
+    public function GetCategory($bid = "")
     {
         $Category = Category::all();
-
         return packJsonData($Category, 'success', 0);
     }
 
@@ -107,12 +107,57 @@ class Manage
         return $result;
     }
 
-    //获取文章
+    //获取文章列表
     public function getArticle()
     {
-//        $Category = Content::all();
-        $Category = Db::table('blog_content')->page(1, 10)->select();
+        $Category = Db::table('blog_content')->page(1, 30)->select();
         return packJsonData($Category, 'success', 0);
+    }
+
+    //获取指定文章
+    public function getOneArticle()
+    {
+        if (Request::has('bid', 'get')) {
+            $Content = new Content();
+            $data = $Content->where('Id', Request::instance()->get('bid', '', 'htmlspecialchars'))->find();
+            $result = packJsonData($data, 'success', 0);
+        } else {
+            $result = packJsonData('', '缺失参数', 10010);
+        }
+        return $result;
+    }
+
+    //删除文章
+    public function deleteArticle(){
+        $id = Request::delete('id', '', 'strip_tags,strtolower');
+        //考虑是否做回收站
+    }
+//    修改文章
+    public function updateArticle(){
+        $bid = Request::put('bid', '', 'strip_tags,strtolower');
+
+        $id = Request::put('id', '', 'strip_tags,strtolower');
+        $title = Request::put('title', '', 'strip_tags,strtolower');
+        $introduction = Request::put('introduction', '', 'strip_tags,strtolower');
+        $text = Request::put('text', '', null);
+        if ($text == null || $title == null || $id == null) {
+            return packJsonData('', '修改失败，标题、类别、内容不能为空', 10007);
+        }
+        $introduction = $introduction == null ? substr(Request::put('text', '', 'strip_tags,strtolower'), 0, 150) : $introduction;
+        $Content = new Content;
+// save方法第二个参数为更新条件
+        $status=$Content->save([
+            'categoryId'  => $id,
+            'title' => $title,
+            'introduction' => $introduction,
+            'text' => $text
+        ],['Id' => $bid]);
+        if ($status) {
+            $result = packJsonData('', 'success', 0);
+        } else {
+            $result = packJsonData('', '修改失败，数据库错误', 10008);
+        }
+        return $result;
     }
 
     public function uploadImg()
@@ -126,8 +171,10 @@ class Manage
 //            $result = ['errno'=>0,'data'=>array( '/api/uploads/'.$info->getSaveName())];
         } else {
             // 上传失败获取错误信息
-            echo $file->getError();
+//            echo $file->getError();
+            $result = packJsonData('', '上传失败', 10009);
         }
         return $result;
     }
+
 }
