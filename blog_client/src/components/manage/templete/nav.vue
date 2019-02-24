@@ -26,9 +26,15 @@ export default {
     };
   },
   mounted: function() {
+    var name = 'check_login_fail';
+    var enddata='';
+    var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+    if (arr != null) enddata= (arr[2]); enddata= null;
+    console.log(enddata)
+    console.log(this.getCookie("check_login_fail"));
     if (this.getCookie("check_login_fail") == "true") {
-       this.delCookie("check_login_fail")
-       this.delCookie("auth_name")
+      this.delCookie("check_login_fail");
+      // this.delCookie("auth_name");
       this.$router.push({ path: "login" });
     }
     this.getCookie("auth_name") == null
@@ -44,7 +50,6 @@ export default {
   methods: {
     handleSelect(key, keyPath) {
       // console.log(key, keyPath);
-      
     }
   },
   watch: {

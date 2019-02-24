@@ -15,6 +15,7 @@ Route::get('think', function () {
 //Route::get('/', 'index');
 //Route::get('hello/:name', 'index/hello');
 
+//manage
 Route::post('manage/login', 'manage/login'); //login
 Route::get('manage/category', 'manage/GetCategory'); //get blog category
 Route::post('manage/category', 'manage/ADDCategory'); //write blog category
@@ -25,6 +26,8 @@ Route::put('manage/article', 'manage/updateArticle'); //get blog category
 Route::delete('manage/article', 'manage/deleteArticle'); //get blog category
 Route::get('manage/onearticle', 'manage/getOneArticle'); //get blog category
 
+//user
+Route::get('public/category', 'index/getcategory');
 
 return [
 

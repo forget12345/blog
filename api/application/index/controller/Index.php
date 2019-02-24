@@ -1,6 +1,6 @@
 <?php
 namespace app\index\controller;
-
+use app\index\model\Category;
 class Index
 {
     public function index()
@@ -8,13 +8,11 @@ class Index
         return 'welcome yuli blog';
     }
 
-    public function hello($name = 'ThinkPHP5')
+    public function getcategory()
     {
-        return 'hello,' . $name;
-    }
-
-    public function q()
-    {
-        return 'hello';
+        $Category = Category::all();
+        return packJsonData($Category, 'success', 0);
+        $result = packJsonData('', 'success', 0);
+        return $result;
     }
 }

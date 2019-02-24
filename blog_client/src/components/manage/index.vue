@@ -42,12 +42,12 @@
             >预览</el-button>
             <el-button
               size="mini"
-              @click="handleEdit(scope.$index, scope.row)"
+              @click="handleEdit(scope.row)"
             >编辑</el-button>
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.$index, scope.row)"
+              @click="handleDelete(scope.row)"
             >删除</el-button>
           </template>
         </el-table-column>
@@ -76,11 +76,11 @@
         <el-button @click="centerDialogVisible = false">关闭</el-button>
         <el-button
           type="primary"
-          @click="centerDialogVisible = false"
+          @click="centerDialogVisible = false,handleEdit('',true)"
         >修改</el-button>
         <el-button
           type="danger"
-          @click="centerDialogVisible = false"
+          @click="centerDialogVisible = false,handleDelete('',true)"
         >删除</el-button>
 
       </span>
@@ -101,15 +101,16 @@ export default {
       centerDialogVisible: false,
       show_title: "",
       show_conten: "",
-      show_time: ""
+      show_time: "",
+      show_edit_id: ""
     };
   },
   methods: {
-    handleEdit(row, data) {
+    handleEdit(data, flag = false) {
       this.$router.push({
         path: "/manage/new",
         query: {
-          id: data.Id
+          id: flag == false ? data.Id : this.show_edit_id
         }
       });
     },
@@ -118,20 +119,17 @@ export default {
       this.show_title = data.title;
       this.show_conten = data.text;
       this.show_time = data.created;
+      this.show_edit_id = data.Id;
       this.centerDialogVisible = true;
     },
-    handleDelete(row, data) {
+    handleDelete(data, flag = false) {
       this.$confirm("此操作将删除该文件博客, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-          this.deleteArticle(data.Id);
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
+          this.deleteArticle(flag == false ? data.Id : this.show_edit_id);
         })
         .catch(() => {
           this.$message({
@@ -148,6 +146,11 @@ export default {
         .then(function(response) {
           console.log(response);
           if (response != false) {
+            _this.$message({
+              type: "success",
+              message: "删除成功!"
+            });
+            _this.getArticle();
           }
         });
     },

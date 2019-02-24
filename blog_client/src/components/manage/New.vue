@@ -80,7 +80,7 @@ export default {
       introduction: "",
       test: "",
       lSflag: false,
-      wangedit:""
+      wangedit: ""
     };
   },
   methods: {
@@ -143,7 +143,7 @@ export default {
             _this.title = response.data.data.title;
             _this.introduction = response.data.data.introduction;
             _this.value = response.data.data.categoryId;
-            
+
             // _this.editorContent = response.data.data.;
           }
         });
@@ -224,25 +224,25 @@ export default {
       this.getOneArticle(editor);
       editor.txt.html("加载中");
     }
-    this.wangedit=editor
+    this.wangedit = editor;
     this.getCategory();
   },
   watch: {
     editorContent(val, oldVal) {
       console.log(val);
-      if (val != "" && this.lSflag != true) {
+      if ((val != "" && this.lSflag != true) || val == "undefined") {
         window.localStorage["blog"] = val;
       }
     },
     title(val, oldVal) {
       console.log(val);
-      if (val != "" && this.lSflag != true) {
+      if ((val != "" && this.lSflag != true) || val == "undefined") {
         window.localStorage["title"] = val;
       }
     },
     introduction(val, oldVal) {
       console.log(val);
-      if (val != "" && this.lSflag != true) {
+      if ((val != "" && this.lSflag != true) || val == "undefined") {
         window.localStorage["introduction"] = val;
       }
     }

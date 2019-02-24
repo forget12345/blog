@@ -110,7 +110,7 @@ class Manage
     //获取文章列表
     public function getArticle()
     {
-        $Category = Db::table('blog_content')->page(1, 30)->select();
+        $Category = Db::table('blog_content')->where('delete_time', 'null')->page(1, 30)->select();
         return packJsonData($Category, 'success', 0);
     }
 
@@ -128,12 +128,29 @@ class Manage
     }
 
     //删除文章
-    public function deleteArticle(){
+    public function deleteArticle()
+    {
         $id = Request::delete('id', '', 'strip_tags,strtolower');
-        //考虑是否做回收站
+        if (strlen($id)>0) {
+            $Content = new Content;
+            // save方法第二个参数为更新条件
+            $status = $Content->save([
+                'delete_time' => date('Y-m-d H:i:s'),
+            ], ['Id' => $id]);
+            if ($status) {
+                $result = packJsonData('', 'success', 0);
+            } else {
+                $result = packJsonData('', '删除失败', 10011);
+            }
+        } else {
+            $result = packJsonData('', '缺失参数', 10010);
+        }
+        return $result;
     }
+
 //    修改文章
-    public function updateArticle(){
+    public function updateArticle()
+    {
         $bid = Request::put('bid', '', 'strip_tags,strtolower');
 
         $id = Request::put('id', '', 'strip_tags,strtolower');
@@ -146,12 +163,12 @@ class Manage
         $introduction = $introduction == null ? substr(Request::put('text', '', 'strip_tags,strtolower'), 0, 150) : $introduction;
         $Content = new Content;
 // save方法第二个参数为更新条件
-        $status=$Content->save([
-            'categoryId'  => $id,
+        $status = $Content->save([
+            'categoryId' => $id,
             'title' => $title,
             'introduction' => $introduction,
             'text' => $text
-        ],['Id' => $bid]);
+        ], ['Id' => $bid]);
         if ($status) {
             $result = packJsonData('', 'success', 0);
         } else {

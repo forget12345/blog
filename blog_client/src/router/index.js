@@ -1,25 +1,24 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+// import Browse from '@/components/Browse'
 import Login from '@/components/manage/Login' //login view
 import New from '@/components/manage/new' //add blog view
 import index from '@/components/manage/index' //add blog view
 import PersonalInfoSet from '@/components/manage/PersonalInfoSet' //personal info set  view
-import Visit from '@/components/Visit' //personal info set  view
-
+import init from '@/components/public/index'
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'init',
+      component: init
     }, {
       path: '/manage/index',
       name: 'index',
       component: index
-    }, 
+    },
     {
       path: '/manage/Login',
       name: 'Login',
@@ -32,10 +31,6 @@ export default new Router({
       path: '/manage/PersonalInfoSet',
       name: 'PersonalInfoSet',
       component: PersonalInfoSet
-    }, {
-      path: '/Visit',
-      name: 'Visit',
-      component: Visit
-    },
+    }
   ]
 })
