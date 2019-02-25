@@ -1,24 +1,22 @@
 <template>
   <div>
     <div
-    v-for="a in data"
+      v-for="a in data"
+      :key="String(a.Id)"
       style="margin-bottom:25px"
       class="infolist"
+      @click="article(String(a.Id))"
     >
-      <h2 style="margin: 3px 0 5px 0;">ThinkPHP初次使用记录</h2>
-      <div style="color: #b9b8b7;font-size: 13px;">2019-02-24 17:56 <span
-          style="line-height:25px;height:25px"
+      <h2 style="margin: 3px 0 5px 0;">{{a.title}}</h2>
+      <div style="color: #b9b8b7;font-size: 13px">{{a.created}}<span
+          style="line-height:25px;height:25px;margin-left: 5px;"
           class="el-tag"
-        >镖旗</span>
+        >{{a.name}}</span>
       </div>
       <div style="color: #92908c;text-indent: 2rem;font-family: -webkit-body;margin: 7px 0;">
-        经常会有人被strtotime结合-1 month, +1 month, next month的时候搞得很困惑, 然后就会觉得这个函数有点不那么靠谱, 动不动就出问题. 用的时候就会很慌…这不, 刚刚就有人在微博上又问我:
-        鸟哥，今天是2018-07-31 执行代码:
-        date("Y-m-d",strtotime("-1 month"))
-        怎么输出是2018-07-01?
-        好的吧, 虽然这个问题看起来很迷惑, 但从内部逻辑上来说呢, 其实是”对”的, 你先别着急哈, 让我慢慢讲</div>
-      <i class="el-icon-view"></i><span style="margin-left:5px;color:#b9b8b7">99</span>
-      <i class="el-icon-service"></i><span style="margin-left:5px;color:#b9b8b7">99</span>
+       {{a.introduction}}</div>
+      <i class="el-icon-view"></i><span style="margin-left:5px;color:#b9b8b7">{{a.visit}}</span>
+      <!-- <i class="el-icon-service"></i><span style="margin-left:5px;color:#b9b8b7">99</span> -->
     </div>
   </div>
 </template>
@@ -27,16 +25,21 @@
 export default {
   props: ["data"],
   data() {
-    return {
-     
-    };
+    return {};
   },
   mounted: function() {
-    console.log(this.data)
+    console.log(this.data);
   },
   methods: {
     handleSelect(key, keyPath) {
       // console.log(key, keyPath);
+    },article(id){
+      this.$router.push({
+        path: "/article",
+        query: {
+          id: id
+        }
+      });
     }
   },
   watch: {}

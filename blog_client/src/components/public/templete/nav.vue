@@ -13,20 +13,19 @@
         alt=""
       >
       <div id="name">blog</div>
-      <el-menu-item index="1">首页</el-menu-item>
+      <el-menu-item @click="router_go('/')" index="1">首页</el-menu-item>
       <el-submenu index="2">
         <template id="sss" slot="title">分类Tags</template>
         <el-menu-item
           style="margin:2px"
           v-for="one in Category"
-          :key="one.Id"
+          :key="String(one.Id)"
           :index="String(one.Id)+'_child'"
         >{{one.name}}</el-menu-item>
 
       </el-submenu>
-
-      <el-menu-item index="shoucang">收藏室</el-menu-item>
-      <el-menu-item index="jianli" >简历</el-menu-item>
+      <el-menu-item @click="router_go('collection')" index="shoucang">收藏室</el-menu-item>
+      <el-menu-item @click="router_go('remuse')"   index="jianli" >简历</el-menu-item>
 
     </el-menu>
   </div>
@@ -45,6 +44,10 @@ export default {
   methods: {
     handleSelect(key, keyPath) {
       // console.log(key, keyPath);
+    },router_go(path){
+      this.$router.push({
+        path: path
+      });
     }
   },
   watch: {}

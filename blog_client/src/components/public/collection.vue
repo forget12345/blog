@@ -2,25 +2,20 @@
   <div>
     <el-container style="">
       <el-header id="header">
-        <Nav :Category="category"></Nav>
+        <Nav :Category="category" ></Nav>
       </el-header>
       <el-container style="margin:auto;width:1100px;margin-top:95px">
         <el-main style="width:70%;padding-top:0">
           <div style="width:95%;margin:auto;text-align:left;">
-            <blog_content :data="blog"></blog_content>
-            <div style="display:block"  class="el-button el-button--primary" type="button">加载更多</div>
           </div>
         </el-main>
         <el-aside
           id="test"
           style="width:330px;"
-        ><user_info
-            v-bind:Category="category"
-            style="position: fixed; width: 330px;"
-          ></user_info>
+        >
+          <user_info  v-bind:Category="category"  style="position: fixed; width: 330px;"></user_info>
         </el-aside>
       </el-container>
-      <el-footer>©2019 TimeYuLi</el-footer>
     </el-container>
   </div>
 </template>
@@ -36,42 +31,22 @@ export default {
   data() {
     return {
       category: [],
-      index: 1,
-      blog:[],
-      page:1,
-      size:10
+      index:1
     };
   },
   mounted: function() {
     // console.log(this.getElementLeft(document.getElementById("test")));
-    this.getCategory();
-    this.getBlog();
+    this.getCategory()
   },
   methods: {
     getCategory: function() {
       var _this = this;
       this.axios.get("public/category").then(function(response) {
         if (response != false) {
-          _this.category = response.data.data;
-          console.log(response.data.data);
+          _this.category=response.data.data;
+          console.log(response.data.data)
         }
       });
-    },
-    getBlog: function(category) {
-      var _this = this;
-      this.axios
-        .get("public/getblog", {
-          params: {
-            page: _this.page,
-            size: _this.size
-          }
-        })
-        .then(function(response) {
-          if (response != false) {
-            console.log(response.data.data);
-            _this.blog=response.data.data
-          }
-        });
     }
   }
 };

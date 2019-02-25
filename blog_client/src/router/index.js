@@ -6,6 +6,9 @@ import New from '@/components/manage/new' //add blog view
 import index from '@/components/manage/index' //add blog view
 import PersonalInfoSet from '@/components/manage/PersonalInfoSet' //personal info set  view
 import init from '@/components/public/index'
+import remuse from '@/components/public/remuse'
+import article from '@/components/public/article'
+import collection from '@/components/public/collection'
 Vue.use(Router)
 
 export default new Router({
@@ -14,6 +17,19 @@ export default new Router({
       path: '/',
       name: 'init',
       component: init
+    }, {
+      path: '/remuse',
+      name: 'remuse',
+      component: remuse
+    }, {
+      path: '/article',
+      name: 'article',
+      component: article
+    }, {
+      path: '/collection',
+      name: 'collection',
+      component: collection
+
     }, {
       path: '/manage/index',
       name: 'index',
