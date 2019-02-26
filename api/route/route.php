@@ -30,6 +30,8 @@ Route::get('manage/onearticle', 'manage/getOneArticle'); //get blog category
 Route::get('public/category', 'index/getcategory');
 Route::get('public/getblog', 'index/getblog');
 Route::get('public/oneblog', 'index/getoneblog');
+Route::get('public/works', 'index/getWorks');
+Route::get('public/userinfo', 'index/getUserInfo');
 
 return [
 

@@ -2,17 +2,24 @@
   <div>
     <div class="infolist ">
       <img
+        v-if="UserInfo.img"
+        id="user_img"
+        src="/static/logo.ico"
+        alt=""
+      >
+      <img
+        v-else
         id="user_img"
         src="/static/logo.ico"
         alt=""
       >
       <div id="user_brief_info">
-        <div id="user_name">TimeYuLi</div>
-        <div> 刚刚开始想做个产品，但是后来不知怎么就开始写代码了!平时喜欢逼逼叨，但不碎碎念。</div>
+        <div id="user_name">{{UserInfo.nickname}}</div>
+        <div> {{UserInfo.say}}</div>
       </div>
       <div style="clear:both"></div>
       <div id="share">
-        <a href="https://github.com/forget12345">GitHub:https://github.com/</a>
+        <a :href="UserInfo.github"> {{UserInfo.github}}</a>
       </div>
     </div>
 
@@ -22,12 +29,15 @@
         style="margin-bottom: 10px;font-weight: bold;"
       >独立作品</div>
       <div
-        v-for="o in 4"
-        :key="o"
+        v-for="o in dataworks"
+        :key="o.Id"
         class="text item"
-        style="margin-bottom:2px"
+        style="margin-bottom:3px;color: #39484ea1;"
       >
-        {{'表白墙 ' + o +'：使用前端后端的技术使用前端后端的技术' }}
+        <a
+          style="cursor: default;color:cadetblue"
+          :href="o.url"
+        >{{o.name}}</a>:<span>{{o.Introduction}}</span>
       </div>
     </el-card>
     <div class="infolist">
@@ -36,7 +46,12 @@
         style="margin-bottom: 10px;font-weight: bold;"
       >Tags</div>
       <div>
-        <el-tag style="margin:2px" v-for="one in Category" :key="one.Id">{{one.name}}</el-tag>
+        <el-tag
+          @click="findCategory(one.Id)"
+          style="margin:2px;    cursor: default;"
+          v-for="one in Category"
+          :key="one.Id"
+        >{{one.name}}</el-tag>
       </div>
 
     </div>
@@ -45,17 +60,46 @@
 <script>
 export default {
   name: "HelloWorld",
-  props:["Category"],
+  props: ["Category"],
   data() {
     return {
-      msg: "Welcome to Your Vue.js App",
+      dataworks: [],
+      UserInfo: []
     };
   },
-  mounted(){
-    console.log(this.getCategory)
+  mounted() {
+    this.works();
+    this.getUserInfo();
   },
   methods: {
-    
+    getUserInfo: function() {
+      var _this = this;
+      this.axios.get("public/userinfo").then(function(response) {
+        if (response != false) {
+          console.log(response.data.data);
+          _this.UserInfo=response.data.data
+        }
+      });
+    },
+    findCategory: function(id) {
+      // this.$emit('searchByCategory');
+      this.$router.push({
+        path: "/tmp",
+        query: {
+          id: id
+        }
+      });
+      // this.$router.go(0);
+    },
+    works: function() {
+      var _this = this;
+      this.axios.get("public/works").then(function(response) {
+        if (response != false) {
+          console.log(response.data.data);
+          _this.dataworks = response.data.data;
+        }
+      });
+    }
   }
 };
 </script>

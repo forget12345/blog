@@ -9,6 +9,9 @@ import init from '@/components/public/index'
 import remuse from '@/components/public/remuse'
 import article from '@/components/public/article'
 import collection from '@/components/public/collection'
+import tmp from '@/components/public/tmp'
+
+
 Vue.use(Router)
 
 export default new Router({
@@ -21,6 +24,10 @@ export default new Router({
       path: '/remuse',
       name: 'remuse',
       component: remuse
+    }, {
+      path: '/tmp',
+      name: 'tmp',
+      component: tmp
     }, {
       path: '/article',
       name: 'article',

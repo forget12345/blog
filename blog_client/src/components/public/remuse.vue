@@ -6,7 +6,8 @@
       </el-header>
       <el-container style="margin:auto;width:1100px;margin-top:95px">
         <el-main style="width:70%;padding-top:0">
-          <div style="width:95%;margin:auto;text-align:left;">
+          <div style="width:95%;margin:auto;text-align:left;" class="infolist">
+            <el-input v-model="input" placeholder="请输入访问口令"></el-input>
           </div>
         </el-main>
         <el-aside
